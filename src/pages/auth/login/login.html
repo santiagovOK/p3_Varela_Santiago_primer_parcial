@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- En este login.html, siguiendo el paso 2, también se quita el selector de rol para que justamente esto no sea más una simuación y utilice los datos de localStorage. El login.html es similar al que usé para el práctico de la unidad 2. -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Food Store</title>
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <main class="login">
+        <section class="login__card" aria-labelledby="login-title">
+            <header class="login__header">
+                <h1 id="login-title">Food Store</h1>
+                <p class="login__subtitle">Iniciar Sesion</p>
+            </header>
+
+            <form id="form" class="login__form" action="#" method="post">
+                <fieldset class="login__fields">
+            
+                    <p class="login__field-group">
+                        <label class="login__label" for="email">Email</label>
+                        <input
+                            class="login__input login__input--email"
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="tuemail@ejemplo.com"
+                            required
+                        >
+                    </p>
+            
+                    <p class="login__field-group">
+                        <label class="login__label" for="password">Contraseña</label>
+                        <input
+                            class="login__input login__input--password"
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Ingresa tu contraseña"
+                            required
+                        >
+                    </p>
+                </fieldset>
+                <div class="login__actions">
+                    <button class="login__button login__button--primary" type="submit">Ingresar</button>
+                </div>
+            </form>
+
+            <p class="login__signup-text">
+                ¿No tenés cuenta? <a class="login__signup-link" href="../registro/registro.html">Registrate</a>
+            </p>
+        </section>
+    </main>
+    <!-- `module` es necesario en este caso porque sino no se puede usar import -->
+    <script type="module" src="./login.ts"></script>
+</body>
+</html>

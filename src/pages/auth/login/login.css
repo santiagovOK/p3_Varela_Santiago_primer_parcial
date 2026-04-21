@@ -1,0 +1,122 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Hace que el cuerpo ocupe toda la altura de la ventana */
+}
+
+.login {
+    background-color: var(--color-blanco);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px; /* Limita el ancho máximo del formulario */
+}
+
+.login__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-title {
+    text-transform: uppercase;
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+}
+
+.login__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--color-primario);
+/*     text-align: center podría ir aquí, pero es innecesario al estar usando flex */
+}
+
+.login__subtitle {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--color-texto);
+    line-height: 1.4;
+}
+
+.login__form    {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    width: 100%; /* respecto al contenedor padre, que es .login, para que el formulario ocupe todo el ancho disponible y así los campos se ajusten a ese ancho. */
+}
+
+.login__fields {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: none;   /* Elimino el borde por defecto del fieldset para que no afecte al diseño. */
+}
+
+.login__field-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.login__label {
+    display: flex;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.login__input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--color-borde);
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.login__input:focus {
+    border-color: var(--color-focus);
+    outline: none; /* Elimina el borde de enfoque por defecto para usar solo el cambio de color. */
+}
+
+.login__actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.login__button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 100%; /* Hace que el botón ocupe todo el ancho del contenedor, respecto al padre */ 
+}
+
+.login__button--primary {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+}
+
+.login__button--primary:hover {
+    background-color: var(--color-focus);
+}
+
+.login__signup-text {
+    font-size: 1.2rem;
+    color: var(--color-texto);
+    line-height: 1.5;
+
+}
+
+.login__signup-link {
+    font-size: 1.2rem;
+    color: var(--color-primario);
+}
