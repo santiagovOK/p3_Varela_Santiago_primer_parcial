@@ -1,5 +1,7 @@
 # Evaluación 1 - Programación 3
 
+[Video Explicativo](https://www.youtube.com/watch?v=WhLhPwLH1wM)
+
 ## Objetivo
 
 El objetivo de esta evaluación es consolidar los conocimientos adquiridos en las primeras unidades del cursado (HTML, CSS, JavaScript y TypeScript), mediante la evolución del proyecto Food Store hacia una aplicación frontend más dinámica e interactiva.
