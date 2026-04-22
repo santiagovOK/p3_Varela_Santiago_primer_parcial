@@ -9,7 +9,7 @@
 	align-items: center;
 	min-height: 6.4rem;
 	padding: 1.2rem 2.4rem;
-	background-color: var(--color-accent-dark);
+	background-color: var(--color-acento-oscuro);
 	color: var(--color-blanco);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .store-home__category-btn--active {
-	background-color: var(--color-accent-dark);
+	background-color: var(--color-acento-oscuro);
 	color: var(--color-blanco);
 	font-weight: 700;
 }
@@ -254,7 +254,7 @@
 	padding: 0.8rem 1.4rem;
 	font-size: 1.5rem;
 	color: var(--color-blanco);
-	background-color: var(--color-accent-dark);
+	background-color: var(--color-acento-oscuro);
 	cursor: pointer;
 }
 
@@ -262,6 +262,8 @@
 .product-card__add-btn:focus-visible {
 	background-color: #2f4b41;
 }
+
+/* Los media query deberían estar en archivos separados por una cuestión de mantenimiento y rendimiento, pero dado que no es una prioridad ni una exigencia de este trabajo, quedarán aquí para esta entrega */
 
 @media (max-width: 920px) {
 	.store-home__layout {

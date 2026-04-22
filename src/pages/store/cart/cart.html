@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Food Store | Carrito</title>
+		<link rel="stylesheet" href="../../../styles.css" /> <!-- Se carga primero el global para que los estilos específicos puedan sobrescribirlo -->
+		<link rel="stylesheet" href="./cart.css" />
+	</head>
+	<body class="store-cart">
+		<header class="store-cart__topbar store-cart__topbar--row">
+			<div class="store-cart__brand">
+				<h1 class="store-cart__logo">FoodStore</h1>
+			</div>
+
+			<nav class="store-cart__menu" aria-label="Navegacion principal">
+				<ul class="store-cart__menu-list store-cart__menu-list--row">
+					<li class="store-cart__menu-item">
+						<a class="store-cart__menu-link" href="../home/home.html">Catalogo</a>
+					</li>
+					<li class="store-cart__menu-item">
+						<a class="store-cart__menu-link store-cart__menu-link--active" href="./cart.html" aria-current="page">
+							Carrito
+							<span class="store-cart__cart-count" id="cart-count">3</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main class="store-cart__main" aria-labelledby="cart-title">
+			<header class="store-cart__header">
+				<h2 class="store-cart__title" id="cart-title">Mi Carrito</h2>
+			</header>
+
+			<section class="store-cart__content store-cart__content--row" id="cart-content" aria-label="Contenido del carrito">
+				<section class="cart-items" aria-label="Productos agregados">
+					<ul class="cart-items__list" id="cart-items-list">
+						<li class="cart-items__item">
+							<article class="cart-product cart-product--row">
+								<div class="cart-product__main cart-product__main--row">
+									<figure class="cart-product__media">
+										<img class="cart-product__image" src="/images/pizza.jpg" alt="Pizza Especial 4 Quesos" />
+									</figure>
+
+									<div class="cart-product__info cart-product__info--col">
+										<h3 class="cart-product__name">Pizza Especial 4 Quesos</h3>
+										<p class="cart-product__category">Pizzas</p>
+										<p class="cart-product__subtotal">Subtotal: $6.800</p>
+									</div>
+								</div>
+
+								<div class="cart-product__actions cart-product__actions--col">
+									<div class="cart-product__quantity cart-product__quantity--row" aria-label="Control de cantidad">
+										<button class="cart-product__quantity-btn" type="button" aria-label="Restar unidad">-</button>
+										<span class="cart-product__quantity-value" aria-live="polite">1</span>
+										<button class="cart-product__quantity-btn" type="button" aria-label="Sumar unidad">+</button>
+									</div>
+									<button class="cart-product__remove-btn" type="button">Eliminar</button>
+								</div>
+							</article>
+						</li>
+
+						<li class="cart-items__item">
+							<article class="cart-product cart-product--row">
+								<div class="cart-product__main cart-product__main--row">
+									<figure class="cart-product__media">
+										<img class="cart-product__image" src="/images/pizza.jpg" alt="Hamburguesa Clasica" />
+									</figure>
+
+									<div class="cart-product__info cart-product__info--col">
+										<h3 class="cart-product__name">Hamburguesa Clasica</h3>
+										<p class="cart-product__category">Hamburguesas</p>
+										<p class="cart-product__subtotal">Subtotal: $3.800</p>
+									</div>
+								</div>
+
+								<div class="cart-product__actions cart-product__actions--col">
+									<div class="cart-product__quantity cart-product__quantity--row" aria-label="Control de cantidad">
+										<button class="cart-product__quantity-btn" type="button" aria-label="Restar unidad">-</button>
+										<span class="cart-product__quantity-value" aria-live="polite">1</span>
+										<button class="cart-product__quantity-btn" type="button" aria-label="Sumar unidad">+</button>
+									</div>
+									<button class="cart-product__remove-btn" type="button">Eliminar</button>
+								</div>
+							</article>
+						</li>
+
+						<li class="cart-items__item">
+							<article class="cart-product cart-product--row">
+								<div class="cart-product__main cart-product__main--row">
+									<figure class="cart-product__media">
+										<img class="cart-product__image" src="/images/pizza.jpg" alt="Hamburguesa BBQ Bacon" />
+									</figure>
+
+									<div class="cart-product__info cart-product__info--col">
+										<h3 class="cart-product__name">Hamburguesa BBQ Bacon</h3>
+										<p class="cart-product__category">Hamburguesas</p>
+										<p class="cart-product__subtotal">Subtotal: $5.100</p>
+									</div>
+								</div>
+
+								<div class="cart-product__actions cart-product__actions--col">
+									<div class="cart-product__quantity cart-product__quantity--row" aria-label="Control de cantidad">
+										<button class="cart-product__quantity-btn" type="button" aria-label="Restar unidad">-</button>
+										<span class="cart-product__quantity-value" aria-live="polite">1</span>
+										<button class="cart-product__quantity-btn" type="button" aria-label="Sumar unidad">+</button>
+									</div>
+									<button class="cart-product__remove-btn" type="button">Eliminar</button>
+								</div>
+							</article>
+						</li>
+					</ul>
+				</section>
+
+				<aside class="cart-summary" aria-label="Resumen de compra">
+					<h3 class="cart-summary__title">Resumen</h3>
+
+					<div class="cart-summary__row cart-summary__row--subtotal">
+						<span class="cart-summary__label">Subtotal</span>
+						<span class="cart-summary__value" id="cart-subtotal">$15.700</span>
+					</div>
+
+					<div class="cart-summary__row cart-summary__row--total">
+						<span class="cart-summary__label cart-summary__label--total">Total</span>
+						<strong class="cart-summary__value cart-summary__value--total" id="cart-total">$15.700</strong>
+					</div>
+
+					<button class="cart-summary__checkout-btn" type="button" disabled>Finalizar compra</button>
+					<p class="cart-summary__note">El checkout no esta disponible en esta version.</p>
+
+					<button class="cart-summary__clear-btn" type="button" id="clear-cart-btn">Vaciar carrito</button>
+				</aside>
+			</section>
+
+			<section class="store-cart__empty" id="cart-empty" aria-label="Carrito vacio" hidden>
+				<div class="store-cart__empty-card">
+					<p class="store-cart__empty-icon" aria-hidden="true">🛒</p>
+					<p class="store-cart__empty-text">Tu carrito esta vacio.</p>
+					<a class="store-cart__empty-link" href="../home/home.html">Ver catalogo</a>
+				</div>
+			</section>
+		</main>
+
+		<script type="module" src="./cart.ts"></script>
+	</body>
+</html>
