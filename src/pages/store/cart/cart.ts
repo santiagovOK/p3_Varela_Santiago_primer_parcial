@@ -1,6 +1,7 @@
 import { PRODUCTS } from "../../../data/data";
 import type { Product } from "../../../types/product";
 import type { CartItem } from "../../../types/product";
+import { saveCart } from "../../../utils/localStorage"; // Importamos la función para guardar el carrito en localStorage (desde utils/localStorage.ts), que se va a usar para persistir el estado del carrito entre sesiones.
 
 
 // 1. Referencias a elementos del DOM (mediante id) que se van a usar en la vista.
@@ -20,23 +21,71 @@ throw new Error("Faltan elementos del DOM en la vista store/cart.");
 
 // 2. Estado del carrito
 
-// Al igual que en `home.ts`, definimos un tipo para el estado del carrito, que es un objeto donde la clave es el productId y el valor es la cantidad de ese producto en el carrito. No es totalmente necesario, pero ayuda a la claridad del código en próximas etapas del TPI.
+// Al igual que en `home.ts`, definimos tipos para el estado del carrito, que es un objeto donde la clave es el productId y el valor es la cantidad de ese producto en el carrito. No es totalmente necesario, pero ayuda a la claridad del código en próximas etapas del TPI.
+
+type CartMap = Record<string, number>; // clave: productId, valor: cantidad
 
 type CartState = {
-  items: { [key: string]: number }; // clave es productId, valor es cantidad
+  items: CartMap;
+  productsById: Map<number, Product>;
 };
 
 // Estado inicial del carrito, que arranca vacío.
-const cartState: CartState = {
+const state: CartState = {
   items: {},
+  productsById: new Map(PRODUCTS.map((product) => [product.id, product])),
 };
 
-// Función para agregar productos al carrito
+// 3) Helpers
+
+// Formatea números a moneda ARS para mostrar precios consistentes en UI, usando el objeto `Intl.NumberFormat`. 
+const formatPrice = (value: number): string => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
+const getTotalUnits = (items: CartMap): number => {
+  return Object.values(items).reduce((acc, qty) => acc + qty, 0);
+};
+
+const syncCartCount = (): void => {
+  cartCount.textContent = String(getTotalUnits(state.items));
+};
+
+const persistCart = (): void => {
+  saveCart(state.items);
+  syncCartCount();
+};
+
+const toRenderableItems = (items: CartMap): CartItem[] => {
+  return Object.entries(items)
+    .map(([productId, cantidad]) => {
+      const product = state.productsById.get(Number(productId));
+      if (!product) return null;
+
+      return {
+        productId: product.id,
+        nombre: product.nombre,
+        precioUnitario: product.precio,
+        cantidad,
+        imagen: product.imagen,
+      };
+    })
+    .filter((item): item is CartItem => item !== null);
+
+};
+
+
+
+// -- Función para agregar productos al carrito
 const addToCart = (productId: string): void => {
-  if (cartState.items[productId]) {
-    cartState.items[productId] += 1;
+  if (state.items[productId]) {
+    state.items[productId] += 1;
   } else {
-    cartState.items[productId] = 1;
+    state.items[productId] = 1;
   }
 
   updateCartCount();
@@ -46,18 +95,9 @@ const addToCart = (productId: string): void => {
 const updateCartCount = (): void => {
   const cartCount = document.getElementById("cart-count") as HTMLSpanElement | null;
   if (cartCount) {
-    const totalItems = Object.values(cartState.items).reduce((sum, quantity) => sum + quantity, 0);
+    const totalItems = Object.values(state.items).reduce((sum, quantity) => sum + quantity, 0);
     cartCount.textContent = totalItems.toString();
   }
-};
-
-// Formatea números a moneda ARS para mostrar precios consistentes en UI, usando el objeto `Intl.NumberFormat`. 
-const formatPrice = (value: number): string => {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(value);
 };
 
 // Event listener para agregar productos al carrito, que captura el evento personalizado "addToCart" disparado desde home.ts
