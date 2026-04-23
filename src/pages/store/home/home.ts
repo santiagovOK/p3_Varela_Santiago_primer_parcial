@@ -203,14 +203,19 @@ categoryList.addEventListener("click", (event) => {
   }
 });
 
+
+
 // Event listener para agregar productos al carrito
 productsList.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   if (target.classList.contains("product-card__add-btn")) {
     const productId = target.getAttribute("data-product-id");
     if (productId) {
-      // Aquí se va a agregar la lógica para agregar el producto al carrito, que puede ser un evento personalizado o una función del carrito
-      console.log(`Producto agregado al carrito: ${productId}`);
+      // Disparar un evento personalizado para agregar el producto al carrito, usando addToCartEvent que se escucha en cart.ts
+      const addToCartEvent = new CustomEvent("addToCart", {
+        detail: { productId },
+      });
+      document.dispatchEvent(addToCartEvent);
     }
   }
 });
