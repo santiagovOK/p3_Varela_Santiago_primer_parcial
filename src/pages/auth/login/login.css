@@ -1,8 +1,14 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh; /* Hace que el cuerpo ocupe toda la altura de la ventana */
+}
+
+header {
+    font-size: 2.5rem;
+    margin-bottom: 5rem;
 }
 
 .login {

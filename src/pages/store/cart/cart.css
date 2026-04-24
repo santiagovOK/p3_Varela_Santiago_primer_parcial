@@ -295,13 +295,15 @@
 }
 
 .store-cart__empty {
+	flex: 1;
 	display: flex;
 	justify-content: center;
-	padding-top: 0.8rem;
+	align-self: center;
+	padding-top: 0;
 }
 
 .store-cart__empty-card {
-	width: min(100%, 68rem);
+	width: 100%;
 	min-height: 28rem;
 	display: flex;
 	flex-direction: column;

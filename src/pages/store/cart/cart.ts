@@ -9,13 +9,13 @@ import { getCart, saveCart, clearCart } from "../../../utils/localStorage"; // I
 const cartItemsList = document.getElementById("cart-items-list") as HTMLUListElement | null;
 const cartSubtotal = document.getElementById("cart-subtotal") as HTMLSpanElement | null;
 const cartTotal = document.getElementById("cart-total") as HTMLSpanElement | null;
-const cartContent = document.getElementById("cart-content") as HTMLElement | null;
+const cartItemsContainer = document.getElementById("cart-items-container") as HTMLElement | null;
 const cartEmpty = document.getElementById("cart-empty") as HTMLElement | null;
 const cartCount = document.getElementById("cart-count") as HTMLSpanElement | null;
 const clearCartBtn = document.getElementById("clear-cart-btn") as HTMLButtonElement | null;
 
 // Guard clause para evitar errores silenciosos si cambia el HTML.
-if (!cartItemsList || !cartSubtotal || !cartTotal || !cartContent || !cartEmpty || !cartCount || !clearCartBtn) {
+if (!cartItemsList || !cartSubtotal || !cartTotal || !cartItemsContainer || !cartEmpty || !cartCount || !clearCartBtn) {
 throw new Error("Faltan elementos del DOM en la vista store/cart.");
 }
 
@@ -77,6 +77,7 @@ const toRenderableItems = (items: CartMap): CartItem[] => {
     .filter((item): item is CartItem => item !== null);
 
 };
+
 // 4) Render principal
 
 const getLineSubtotal = (precioUnitario: number, cantidad: number): number => {
@@ -131,12 +132,12 @@ const renderCartItems = (items: CartItem[]): void => {
 
 const toggleEmptyState = (hasItems: boolean): void => {
   if (hasItems) {
-    cartContent.hidden = false;
+    cartItemsContainer.hidden = false;
     cartEmpty.hidden = true;
     return;
   }
 
-  cartContent.hidden = true;
+  cartItemsContainer.hidden = true;
   cartEmpty.hidden = false;
 };
 

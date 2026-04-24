@@ -34,7 +34,7 @@
 			</header>
 
 			<section class="store-cart__content store-cart__content--row" id="cart-content" aria-label="Contenido del carrito">
-				<section class="cart-items" aria-label="Productos agregados">
+				<section class="cart-items" id="cart-items-container" aria-label="Productos agregados">
 					<ul class="cart-items__list" id="cart-items-list">
 						<li class="cart-items__item">
 							<article class="cart-product cart-product--row">
@@ -113,6 +113,14 @@
 					</ul>
 				</section>
 
+				<section class="store-cart__empty" id="cart-empty" aria-label="Carrito vacio" hidden>
+					<div class="store-cart__empty-card">
+						<p class="store-cart__empty-icon" aria-hidden="true">🛒</p>
+						<p class="store-cart__empty-text">Tu carrito esta vacio.</p>
+						<a class="store-cart__empty-link" href="../home/home.html">Ver catalogo</a>
+					</div>
+				</section>
+
 				<aside class="cart-summary" aria-label="Resumen de compra">
 					<h3 class="cart-summary__title">Resumen</h3>
 
@@ -131,14 +139,6 @@
 
 					<button class="cart-summary__clear-btn" type="button" id="clear-cart-btn">Vaciar carrito</button>
 				</aside>
-			</section>
-
-			<section class="store-cart__empty" id="cart-empty" aria-label="Carrito vacio" hidden>
-				<div class="store-cart__empty-card">
-					<p class="store-cart__empty-icon" aria-hidden="true">🛒</p>
-					<p class="store-cart__empty-text">Tu carrito esta vacio.</p>
-					<a class="store-cart__empty-link" href="../home/home.html">Ver catalogo</a>
-				</div>
 			</section>
 		</main>
 
