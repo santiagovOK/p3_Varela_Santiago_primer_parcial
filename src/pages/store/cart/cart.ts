@@ -58,6 +58,11 @@ const syncCartCount = (): void => {
 const persistCart = (): void => {
   saveCart(state.items);
   syncCartCount();
+
+  console.log("[store-cart] Carrito persistido", {
+    items: state.items,
+    totalUnits: getTotalUnits(state.items),
+  });
 };
 
 const toRenderableItems = (items: CartMap): CartItem[] => {
@@ -85,12 +90,29 @@ const getLineSubtotal = (precioUnitario: number, cantidad: number): number => {
 };
 
 const updateTotals = (items: CartItem[]): void => {
+  const lines = items.map((item) => {
+    const subtotal = getLineSubtotal(item.precioUnitario, item.cantidad);
+
+    return {
+      productId: item.productId,
+      nombre: item.nombre,
+      precioUnitario: item.precioUnitario,
+      cantidad: item.cantidad,
+      subtotal,
+    };
+  });
+
   const total = items.reduce((acc, item) => {
     return acc + getLineSubtotal(item.precioUnitario, item.cantidad);
   }, 0);
 
   cartSubtotal.textContent = formatPrice(total);
   cartTotal.textContent = formatPrice(total);
+
+  console.log("[store-cart] Totales actualizados", {
+    lines,
+    total,
+  });
 };
 
 const createCartItemTemplate = (item: CartItem): string => {
@@ -134,16 +156,24 @@ const toggleEmptyState = (hasItems: boolean): void => {
   if (hasItems) {
     cartItemsContainer.hidden = false;
     cartEmpty.hidden = true;
+    console.log("[store-cart] Estado de vista", { hasItems: true });
     return;
   }
 
   cartItemsContainer.hidden = true;
   cartEmpty.hidden = false;
+  console.log("[store-cart] Estado de vista", { hasItems: false });
 };
 
 const renderCartView = (): void => {
   const renderableItems = toRenderableItems(state.items);
   const hasItems = renderableItems.length > 0;
+
+  console.log("[store-cart] Render de carrito", {
+    storedItems: state.items,
+    renderableItems: renderableItems.length,
+    hasItems,
+  });
 
   toggleEmptyState(hasItems);
   syncCartCount();
@@ -162,11 +192,19 @@ const renderCartView = (): void => {
 // 6) Interacciones
 
 const increaseItemQuantity = (productId: string): void => {
+  const previousQuantity = state.items[productId] ?? 0;
+
   if (!state.items[productId]) {
     state.items[productId] = 1;
   } else {
     state.items[productId] += 1;
   }
+
+  console.log("[store-cart] Cantidad aumentada", {
+    productId,
+    previousQuantity,
+    newQuantity: state.items[productId],
+  });
 };
 
 const decreaseItemQuantity = (productId: string): void => {
@@ -175,14 +213,33 @@ const decreaseItemQuantity = (productId: string): void => {
 
   if (current <= 1) {
     delete state.items[productId];
+
+    console.log("[store-cart] Cantidad disminuida y producto eliminado", {
+      productId,
+      previousQuantity: current,
+      newQuantity: 0,
+    });
     return;
   }
 
   state.items[productId] = current - 1;
+
+  console.log("[store-cart] Cantidad disminuida", {
+    productId,
+    previousQuantity: current,
+    newQuantity: state.items[productId],
+  });
 };
 
 const removeItem = (productId: string): void => {
+  const previousQuantity = state.items[productId] ?? 0;
   delete state.items[productId];
+
+  console.log("[store-cart] Producto eliminado", {
+    productId,
+    previousQuantity,
+    items: state.items,
+  });
 };
 
 cartItemsList.addEventListener("click", (event: MouseEvent) => {
@@ -191,6 +248,11 @@ cartItemsList.addEventListener("click", (event: MouseEvent) => {
   const productId = target.getAttribute("data-product-id");
 
   if (!action || !productId) return;
+
+  console.log("[store-cart] Accion detectada", {
+    action,
+    productId,
+  });
 
   if (action === "increase") {
     increaseItemQuantity(productId);
@@ -209,8 +271,13 @@ cartItemsList.addEventListener("click", (event: MouseEvent) => {
 });
 
 clearCartBtn.addEventListener("click", () => {
+  const previousItems = { ...state.items };
   state.items = {};
   clearCart();
+  console.log("[store-cart] Carrito vaciado", {
+    previousItems,
+    removedItemsCount: Object.keys(previousItems).length,
+  });
   renderCartView();
 });
 renderCartView(); // Renderizado del estado actual del carrito

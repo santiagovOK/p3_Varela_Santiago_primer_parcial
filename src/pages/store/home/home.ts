@@ -102,15 +102,29 @@ const getTotalUnits = (items: CartMap): number => {
 
 const syncCartCountFromStorage = (): void => {
   const cart = getCart();
-  cartCount.textContent = String(getTotalUnits(cart));
+  const totalUnits = getTotalUnits(cart);
+  cartCount.textContent = String(totalUnits);
+  console.log("[store-home] Contador de carrito sincronizado", {
+    totalUnits,
+    cart,
+  });
 };
 
 const addProductToCartStorage = (productId: string): void => {
-
-const cart = getCart();
-  cart[productId] = (cart[productId] ?? 0) + 1;
+  const cart = getCart();
+  const previousQuantity = cart[productId] ?? 0;
+  cart[productId] = previousQuantity + 1;
   saveCart(cart);
-  cartCount.textContent = String(getTotalUnits(cart));
+  const totalUnits = getTotalUnits(cart);
+  cartCount.textContent = String(totalUnits);
+
+  console.log("[store-home] Producto agregado al carrito", {
+    productId,
+    previousQuantity,
+    newQuantity: cart[productId],
+    totalUnits,
+    cart,
+  });
 };
 
 // Crea el HTML de una tarjeta de producto usando la estructura BEM de home.html.
@@ -191,6 +205,13 @@ const refreshView = (): void => {
   applyFilters();
   renderProducts();
   updateSearchFeedback();
+
+  console.log("[store-home] Vista refrescada", {
+    selectedCategory: state.selectedCategory,
+    searchTerm: state.searchTerm || "(vacio)",
+    totalProducts: baseProducts.length,
+    filteredProducts: state.filteredProducts.length,
+  });
 };
 
 // 5 - Event Listeners para interacción con la vista
@@ -200,6 +221,11 @@ searchInput.addEventListener("input", (event) => {
   const target = event.target as HTMLInputElement;
   state.searchTerm = target.value;
   refreshView();
+
+  console.log("[store-home] Busqueda actualizada", {
+    searchTerm: state.searchTerm || "(vacio)",
+    filteredProducts: state.filteredProducts.length,
+  });
 });
 
 // Event listener para categorías
@@ -216,6 +242,12 @@ categoryList.addEventListener("click", (event) => {
     });
 
     refreshView();
+
+    console.log("[store-home] Categoria seleccionada", {
+      selectedCategory: state.selectedCategory,
+      searchTerm: state.searchTerm || "(vacio)",
+      filteredProducts: state.filteredProducts.length,
+    });
   }
 });
 
@@ -231,6 +263,7 @@ productsList.addEventListener("click", (event) => {
   const productId = button.getAttribute("data-product-id");
   if (!productId) return;
 
+  console.log("[store-home] Click en agregar producto", { productId });
   addProductToCartStorage(productId);
 });
 
@@ -239,3 +272,10 @@ productsList.addEventListener("click", (event) => {
 // Inicializa la vista al cargar la página
 refreshView();
 syncCartCountFromStorage();
+
+console.log("[store-home] Catalogo inicializado", {
+  totalProducts: baseProducts.length,
+  selectedCategory: state.selectedCategory,
+  searchTerm: state.searchTerm || "(vacio)",
+  filteredProducts: state.filteredProducts.length,
+});
