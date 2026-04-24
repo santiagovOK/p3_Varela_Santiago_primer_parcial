@@ -1,4 +1,5 @@
 import { PRODUCTS } from "../../../data/data";
+import { getCart, saveCart, type CartMap } from "../../../utils/localStorage" // Funciones para manejar el carrito en localStorage
 import type { Product } from "../../../types/product";
 
 // 1 - Referencias del DOM al inicio
@@ -95,6 +96,23 @@ const formatPrice = (value: number): string => {
   }).format(value);
 };
 
+const getTotalUnits = (items: CartMap): number => {
+  return Object.values(items).reduce((acc, qty) => acc + qty, 0);
+};
+
+const syncCartCountFromStorage = (): void => {
+  const cart = getCart();
+  cartCount.textContent = String(getTotalUnits(cart));
+};
+
+const addProductToCartStorage = (productId: string): void => {
+
+const cart = getCart();
+  cart[productId] = (cart[productId] ?? 0) + 1;
+  saveCart(cart);
+  cartCount.textContent = String(getTotalUnits(cart));
+};
+
 // Crea el HTML de una tarjeta de producto usando la estructura BEM de home.html.
 // El botón "Agregar" queda preparado con data-product-id para conectarlo después al carrito.
 const createProductCardTemplate = (product: Product): string => {
@@ -175,8 +193,6 @@ const refreshView = (): void => {
   updateSearchFeedback();
 };
 
-// ... existing code ...
-
 // 5 - Event Listeners para interacción con la vista
 
 // Event listener para búsqueda
@@ -208,19 +224,18 @@ categoryList.addEventListener("click", (event) => {
 // Event listener para agregar productos al carrito
 productsList.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
-  if (target.classList.contains("product-card__add-btn")) {
-    const productId = target.getAttribute("data-product-id");
-    if (productId) {
-      // Disparar un evento personalizado para agregar el producto al carrito, usando addToCartEvent que se escucha en cart.ts
-      const addToCartEvent = new CustomEvent("addToCart", {
-        detail: { productId },
-      });
-      document.dispatchEvent(addToCartEvent);
-    }
-  }
+  const button = target.closest(".product-card__add-btn") as HTMLButtonElement | null;
+
+  if (!button) return;
+
+  const productId = button.getAttribute("data-product-id");
+  if (!productId) return;
+
+  addProductToCartStorage(productId);
 });
 
 // 6 - Inicialización de la vista
 
 // Inicializa la vista al cargar la página
 refreshView();
+syncCartCountFromStorage();
