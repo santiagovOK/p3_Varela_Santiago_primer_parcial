@@ -65,12 +65,16 @@ const persistCart = (): void => {
   });
 };
 
+// Función para convertir el estado del carrito (CartMap) en un array de CartItem, que es una estructura más adecuada para renderizar la vista del carrito, ya que incluye información detallada de cada producto (nombre, precio unitario, imagen) además de la cantidad.
+
 const toRenderableItems = (items: CartMap): CartItem[] => {
-  return Object.entries(items)
-    .map(([productId, cantidad]) => {
+  return Object.entries(items) // convierte el objeto CartMap en un array de [productId, cantidad]
+    .map(([productId, cantidad]) => { // mapea cada entrada del carrito a un CartItem, buscando la información del producto en el estado (state.productsById) para completar los datos necesarios para la vista.
       const product = state.productsById.get(Number(productId));
+      // Si el producto no existe o se eliminó, se omite devolviendo null y después se filtra en la siguiente etapa.
       if (!product) return null;
 
+      // Sino Devuelve un objeto CartItem con la información necesaria para renderizar la vista del carrito, incluyendo el productId, nombre, precio unitario, cantidad y la imagen del producto.
       return {
         productId: product.id,
         nombre: product.nombre,
@@ -79,6 +83,8 @@ const toRenderableItems = (items: CartMap): CartItem[] => {
         imagen: product.imagen,
       };
     })
+    
+    // Valida que el resultado del mapeo sea un CartItem válido (no null) antes de incluirlo en el array final, asegurando que solo se rendericen productos que existen en el estado actual.
     .filter((item): item is CartItem => item !== null);
 
 };
@@ -89,10 +95,16 @@ const getLineSubtotal = (precioUnitario: number, cantidad: number): number => {
   return precioUnitario * cantidad;
 };
 
-const updateTotals = (items: CartItem[]): void => {
-  const lines = items.map((item) => {
-    const subtotal = getLineSubtotal(item.precioUnitario, item.cantidad);
+// Función para actualizar los totales del carrito (subtotal y total), que se llama cada vez que se renderiza la vista del carrito, calculando el subtotal de cada línea (producto) y el total general sumando los subtotales. Finalmente actualiza el contenido en la interfaz de usuario.
 
+const updateTotals = (items: CartItem[]): void => {
+
+  // Subfunción para calcular el subtotal de una línea del carrito, multiplicando el precio unitario por la cantidad de ese producto en el carrito.
+
+  const lines = items.map((item) => { // Mapea cada item del carrito a un objeto que incluye el subtotal de esa línea
+    const subtotal = getLineSubtotal(item.precioUnitario, item.cantidad); // Calcula el subtotal de la línea multiplicando el precio unitario por la cantidad
+
+    // Devuelve un objeto con la información del item y su subtotal
     return {
       productId: item.productId,
       nombre: item.nombre,
@@ -102,12 +114,17 @@ const updateTotals = (items: CartItem[]): void => {
     };
   });
 
-  const total = items.reduce((acc, item) => {
-    return acc + getLineSubtotal(item.precioUnitario, item.cantidad);
-  }, 0);
+  // Subfunción para calcular el total general del carrito sumando los subtotales de cada línea, utilizando el método reduce para acumular el total a partir de los subtotales calculados previamente.
 
+  const total = items.reduce((acc, item) => {
+    // Acumulador que suma el subtotal de cada línea al total general, utilizando la función getLineSubtotal para calcular el subtotal de cada línea a partir del precio unitario y la cantidad.
+    return acc + getLineSubtotal(item.precioUnitario, item.cantidad);
+  }, 0); // El segundo argumento (0) es el valor inicial del acumulador, que arranca en 0 y se va sumando con cada subtotal de línea para obtener el total general del carrito.
+
+  // Formateo de totales a formato de moneda ARS utilizando la función formatPrice
   cartSubtotal.textContent = formatPrice(total);
   cartTotal.textContent = formatPrice(total);
+
 
   console.log("[store-cart] Totales actualizados", {
     lines,
@@ -165,9 +182,11 @@ const toggleEmptyState = (hasItems: boolean): void => {
   console.log("[store-cart] Estado de vista", { hasItems: false });
 };
 
+// Función que orquesta las opraciones de renderizado para actualizar completamente la vista del carrito. Garantiza que la interfaz de usuario esté sincronizada con el estado actual del carrito
 const renderCartView = (): void => {
+  // Variable que usa la función auxiliar toRenderableItems para convertir el estado del carrito (CartMap) en un array de CartItem, que es una estructura más adecuada para renderizar la vista del carrito, ya que incluye información detallada de cada producto (nombre, precio unitario, imagen) además de la cantidad.
   const renderableItems = toRenderableItems(state.items);
-  const hasItems = renderableItems.length > 0;
+  const hasItems = renderableItems.length > 0; // Variable que almacena el resultado de la determinación si el carrito tiene items para mostrar la vista correspondiente (vacía o con productos)
 
   console.log("[store-cart] Render de carrito", {
     storedItems: state.items,
@@ -175,9 +194,11 @@ const renderCartView = (): void => {
     hasItems,
   });
 
-  toggleEmptyState(hasItems);
-  syncCartCount();
+  
+  toggleEmptyState(hasItems); // Ejecuta la función auxiliar que muestra u oculta la vista de carrito vacío o con productos según el estado actual del carrito (si tiene items o no)
+  syncCartCount(); // Ejecuta la función auxiliar que sincroniza el contador visual del carrito en la UI con la cantidad total de unidades en el carrito, sumando las cantidades de todos los productos.
 
+  // Si no hay items para mostrar, limpia el contenedor de items del carrito y actualiza los totales a $0, evitando renderizar la lista de productos y mostrando la vista de carrito vacío.
   if (!hasItems) {
     cartItemsList.innerHTML = "";
     cartSubtotal.textContent = formatPrice(0);
@@ -185,6 +206,7 @@ const renderCartView = (): void => {
     return;
   }
 
+  // Funciones auxiliares que renderizan la lista de productos en el carrito y actualizan los totales (subtotal y total) según el estado actual del carrito
   renderCartItems(renderableItems);
   updateTotals(renderableItems);
 };

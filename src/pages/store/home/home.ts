@@ -77,11 +77,16 @@ const matchesSearch = (product: Product, searchTerm: string): boolean => {
 // Aplica ambos criterios de filtro sobre baseProducts y actualiza el estado.
 // Esta función será llamada por los listeners de búsqueda y categorías.
 const applyFilters = (): void => {
+  // Filtra baseProducts según categoría y término de búsqueda, y actualiza state.filteredProducts con el resultado.
   state.filteredProducts = baseProducts.filter((product) => {
+    // Verifica con la función auxiliar si el producto coincide con la categoría seleccionada y el término de búsqueda.
     const categoryOk = matchesCategory(product, state.selectedCategory);
+    // Verifica con la función auxiliar si el producto coincide con el término de búsqueda.
     const searchOk = matchesSearch(product, state.searchTerm);
-
+    // El producto se incluye en el resultado solo si cumple ambos criterios (categoría y búsqueda) usando el operador AND.
     return categoryOk && searchOk;
+
+    // Salida: actualiza state.filteredProducts con los productos que cumplen ambos criterios, para luego ser renderizados en la vista.
   });
 };
 
@@ -110,13 +115,15 @@ const syncCartCountFromStorage = (): void => {
   });
 };
 
+// Función para agregar un producto al carrito, actualiza el carrito en localStorage y sincroniza el contador visual del carrito en la UI. Recibe el productId como string (obtenido del atributo data-product-id del botón).
+
 const addProductToCartStorage = (productId: string): void => {
-  const cart = getCart();
-  const previousQuantity = cart[productId] ?? 0;
-  cart[productId] = previousQuantity + 1;
-  saveCart(cart);
-  const totalUnits = getTotalUnits(cart);
-  cartCount.textContent = String(totalUnits);
+  const cart = getCart(); // Obtiene el estado actual del carrito desde localStorage (par id - cantidad)
+  const previousQuantity = cart[productId] ?? 0; // Obtiene la cantidad actual del producto en el carrito, si no existe se considera 0
+  cart[productId] = previousQuantity + 1; // Incrementa la cantidad del producto en el carrito
+  saveCart(cart); // Funcion auxiliar que convierte el objeto cart a JSON y lo guarda en localStorage
+  const totalUnits = getTotalUnits(cart); // Calcula la cantidad total de unidades en el carrito sumando las cantidades de todos los productos
+  cartCount.textContent = String(totalUnits); // Actualiza el contador visual del carrito en la UI con la nueva cantidad total de unidades
 
   console.log("[store-home] Producto agregado al carrito", {
     productId,
@@ -155,13 +162,17 @@ const createProductCardTemplate = (product: Product): string => {
 // Renderiza el listado completo en el UL principal.
 // Primero limpia contenido existente para evitar duplicados con la tarjeta estática del HTML.
 const renderProducts = (): void => {
-  productsList.innerHTML = "";
+  productsList.innerHTML = ""; // Limpia el contenido existente del contenedor de productos para evitar duplicados.
 
+  // Utilización del estado actual de los productos filtrados (state.filteredProducts) para generar el HTML de cada tarjeta, y luego se une todo en un solo string para asignarlo al innerHTML del contenedor.
   const cardsMarkup = state.filteredProducts.map((product) => {
     return createProductCardTemplate(product);
+    // createProductCardTemplate es la función auxiliar que genera el HTML de cada tarjeta, recibiendo un producto como argumento y devolviendo el string con la estructura HTML correspondiente.
   });
 
   productsList.innerHTML = cardsMarkup.join("");
+
+  // Salida: el contenedor UL con id "products-list" (el listado) queda actualizado con las tarjetas de los productos que cumplen los criterios de búsqueda y categoría, según el estado actual de state.filteredProducts.
 };
 
 // Actualiza el mensaje de estado debajo del buscador.
@@ -202,9 +213,9 @@ const updateSearchFeedback = (): void => {
 // 3) actualiza feedback visual
 
 const refreshView = (): void => {
-  applyFilters();
-  renderProducts();
-  updateSearchFeedback();
+  applyFilters(); // Aplica criterios de filtrado
+  renderProducts(); // refresca el listado de productos en la UI según el estado actual de state.filteredProducts
+  updateSearchFeedback(); // Actualiza el mensaje de feedback debajo del buscador para reflejar el estado actual del filtrado
 
   console.log("[store-home] Vista refrescada", {
     selectedCategory: state.selectedCategory,
