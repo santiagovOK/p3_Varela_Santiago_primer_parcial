@@ -9,8 +9,12 @@
 
 # Links de relevancia para la evaluación
 
-**- Video explicativo:**
-**- Presentación utilizada en el video:**
+**Link al repositorio en Github: https://github.com/santiagovOK/p3_Varela_Santiago_primer_parcial**
+
+**- Video explicativo: https://youtu.be/XsA_l7GETsY**
+**- Video explicativo (link B):https://drive.google.com/file/d/1tLh6fcIgUK24Sm0hlEJID5eusZOVyP60/view?usp=sharing**
+
+**- Presentación utilizada en el video:https://whimsical.com/santiagovarela/p3-primer-parcial-X24Fejunufkt4kNEjD7kYZ**
 
 ---
 
